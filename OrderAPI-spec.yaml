@@ -54,6 +54,9 @@ paths:
           description: Order not found
         '500':
           description: Internal server error
+      security:
+        - clientID: []
+          clientSecret: []
 components:
   schemas:
     OrderDetails:
@@ -100,5 +103,3 @@ components:
       type: apiKey
 
 # Made with Bob
-# Note: Security is enforced at the Product/Plan level, not in the OpenAPI spec
-# This allows testing in API Manager without requiring subscriptions
