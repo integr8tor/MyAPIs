@@ -54,9 +54,6 @@ paths:
           description: Order not found
         '500':
           description: Internal server error
-      security:
-        - clientID: []
-          clientSecret: []
 components:
   schemas:
     OrderDetails:
@@ -91,15 +88,16 @@ components:
           description: Detailed tracking status
   securitySchemes:
     clientID:
+      type: apiKey
       name: X-IBM-Client-Id
       in: header
       description: Client ID for API authentication
-      type: apiKey
     clientSecret:
+      type: apiKey
       name: X-IBM-Client-Secret
       in: header
       description: Client Secret for API authentication
       x-key-type: client_secret
-      type: apiKey
 
 # Made with Bob
+# Security schemes are defined but not enforced - can be enabled at Product/Plan level if needed
