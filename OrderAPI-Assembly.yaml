@@ -20,8 +20,8 @@ spec:
       execute:
         - invoke:
             version: 2.0.0
-            title: 'Invoke Order Backend'
-            description: 'Calls the backend order fulfillment system to retrieve order details and tracking information'
+            title: Invoke Order Backend
+            description: Calls the backend order fulfillment system to retrieve order details and tracking information
             target-url: https://sample-api.us-east-a.apiconnect.automation.ibm.com/orders/order/$(request.parameters.orderNumber)
             verb: GET
             header-control:
@@ -35,16 +35,16 @@ spec:
             output: backendResponse
         - parse:
             version: 2.1.0
-            title: 'Parse JSON Response'
-            description: 'Parses the JSON response from backend'
+            title: Parse JSON Response
+            description: Parses the JSON response from backend
             parse-settings-reference:
               default: apic-default-parsesettings
             input: backendResponse
             output: parsedOrder
         - map:
             version: 2.1.0
-            title: 'Transform Order Data'
-            description: 'Maps and transforms order data fields for enhanced API response'
+            title: Transform Order Data
+            description: Maps and transforms order data fields for enhanced API response
             inputs:
               input:
                 schema:
@@ -103,15 +103,14 @@ spec:
                 from: input.tracking_status
         - redact:
             version: 2.0.0
-            title: 'Redact Tracking Number'
-            description: 'Redacts sensitive tracking number information for privacy'
-            actions:
+            title: Redact Tracking Number
+            description: Redacts sensitive tracking number information for privacy
+            redactions:
               - action: redact
                 path: message.body.trackingNumber
-                value: '***REDACTED***'
     activity-log:
       enabled: true
       success-content: activity
       error-content: payload
 
-# Made with Bob
+#BNANANANANNANANANNANANAN
