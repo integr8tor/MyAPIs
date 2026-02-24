@@ -1,0 +1,17 @@
+kind: API
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags: []
+  type: REST
+spec:
+  api-spec:
+    $path: ./OrderAPI-spec.yaml
+  policy-sequence:
+    - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI_Assembly:1.0
+  cors:
+    $ref: LBF_DEMO_OrderAPI:DemoOrderAPI_Cors:1.0
+
+# Made with Bob

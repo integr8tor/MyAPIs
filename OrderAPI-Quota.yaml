@@ -1,0 +1,18 @@
+kind: Quota
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI_Quota
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags: []
+  description: 'Rate limiting quota for Demo Order API'
+spec:
+  maxRequest: 100
+  interval: 1m
+  extensions:
+    dp-gateway:
+      apiVersion: api.ibm.com/v1
+      spec:
+        onLimitReach: block
+
+# Made with Bob

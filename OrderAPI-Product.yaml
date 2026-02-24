@@ -1,0 +1,16 @@
+kind: Product
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI_Product
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags:
+    - product
+  description: 'Demo Order API Product with Client ID and Client Secret authentication'
+spec:
+  apis:
+    - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI:1.0
+  plans:
+    - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI_Plan:1.0
+
+# Made with Bob

@@ -1,0 +1,33 @@
+kind: Plan
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI_Plan
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags:
+    - plan
+  description: 'Demo plan for Order API with Client ID and Client Secret'
+spec:
+  qos:
+    withQuota:
+      plan-limit:
+        - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI_Quota:1.0
+  extensions:
+    dp-gateway:
+      apiVersion: api.ibm.com/v1
+      spec:
+        apis:
+          - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI:1.0
+            operations:
+              - path: /order/{orderNumber}
+                method: get
+    dp-nano-gateway:
+      apiVersion: api.ibm.com/v1
+      spec:
+        apis:
+          - $ref: LBF_DEMO_OrderAPI:DemoOrderAPI:1.0
+            operations:
+              - path: /order/{orderNumber}
+                method: get
+
+# Made with Bob
