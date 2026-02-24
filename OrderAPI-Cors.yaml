@@ -1,0 +1,26 @@
+kind: CORS
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI_Cors
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags: []
+  description: 'CORS configuration for Demo Order API'
+spec:
+  rules:
+    - action: allow
+      originList:
+        - '*'
+      allowCredentials: true
+      allowMethods:
+        - GET
+      allowHeaders:
+        - X-IBM-Client-Id
+        - X-IBM-Client-Secret
+      maxAge: 0
+      exposeHeaders:
+        predefined: false
+        custom: ''
+        backend: false
+
+# Made with Bob

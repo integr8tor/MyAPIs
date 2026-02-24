@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: Demo Order Tracking API
+  x-ibm-name: demoorderapi
+  version: '1.0'
+  description: Demo API for viewing and tracking shipping orders and deliveries with Client ID + Client Secret authentication
+  contact:
+    name: IBM Corporation
+    url: https://www.ibm.com/products/api-connect
+  termsOfService: https://github.com/ibm-apiconnect/sample-orders-api
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  catalogs: {}
+  phase: realized
+  gateway: datapower-api-gateway
+  properties:
+    target-url:
+      value: https://sample-api.us-east-a.apiconnect.automation.ibm.com/orders
+      description: URL of the backend service
+      encoded: false
+externalDocs:
+  description: "Github project for this API, containing source code and deployment pipeline"
+  url: https://github.com/ibm-apiconnect/sample-orders-api
+servers:
+  - url: https://sample-api.us-east-a.apiconnect.automation.ibm.com/orders
+    description: Order backend service
+paths:
+  /order/{orderNumber}:
+    get:
+      operationId: getOrder
+      summary: Retrieve the details of your order
+      description: Retrieve the details of your order by providing the order number
+      tags:
+        - Orders
+      parameters:
+        - name: orderNumber
+          in: path
+          description: Order number to lookup - you should find this in your confirmation e-mail
+          required: true
+          schema:
+            type: string
+            example: "1234"
+      responses:
+        '200':
+          description: Order found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetails'
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    OrderDetails:
+      type: object
+      properties:
+        order_number:
+          type: string
+          description: The order number
+          example: "ORD00989792"
+        status:
+          type: string
+          description: Current order status
+          enum:
+            - SHIPPED
+            - PICKED
+            - PENDING
+            - DELIVERED
+          example: "SHIPPED"
+        created_at:
+          type: string
+          format: date-time
+          description: Date when order was created
+        shipped_at:
+          type: string
+          format: date-time
+          description: Date when order was shipped
+        tracking_reference:
+          type: string
+          description: Tracking reference number
+        tracking_status:
+          type: object
+          description: Detailed tracking status
+  securitySchemes:
+    clientID:
+      name: X-IBM-Client-Id
+      in: header
+      description: Client ID for API authentication
+      type: apiKey
+    clientSecret:
+      name: X-IBM-Client-Secret
+      in: header
+      description: Client Secret for API authentication
+      x-key-type: client_secret
+      type: apiKey
+
+# Made with Bob
+# Note: Security is enforced at the Product/Plan level, not in the OpenAPI spec
+# This allows testing in API Manager without requiring subscriptions

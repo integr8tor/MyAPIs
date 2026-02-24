@@ -1,0 +1,117 @@
+kind: DataPowerAssembly
+apiVersion: api.ibm.com/v1
+metadata:
+  name: DemoOrderAPI_Assembly
+  namespace: LBF_DEMO_OrderAPI
+  version: '1.0'
+  tags: []
+  labels:
+    gatewayTypes:
+      - datapower
+spec:
+  x-ibm-configuration:
+    enforced: true
+    testable: true
+    phase: realized
+    gateway: datapower-api-gateway
+    compatibility:
+      suppress-limitation-errors: true
+    assembly:
+      execute:
+        - invoke:
+            version: 2.0.0
+            title: 'Invoke Order Backend'
+            description: 'Calls the backend order fulfillment system to retrieve order details and tracking information'
+            target-url: https://sample-api.us-east-a.apiconnect.automation.ibm.com/orders/order/$(request.parameters.orderNumber)
+            verb: GET
+            header-control:
+              type: blocklist
+              values: []
+            parameter-control:
+              type: allowlist
+              values: []
+            timeout: 60
+            persistent-connection: true
+            output: backendResponse
+        - parse:
+            version: 2.1.0
+            title: 'Parse JSON Response'
+            description: 'Parses the JSON response from backend'
+            parse-settings-reference:
+              default: apic-default-parsesettings
+            input: backendResponse
+            output: parsedOrder
+        - map:
+            version: 2.1.0
+            title: 'Transform Order Data'
+            description: 'Maps and transforms order data fields for enhanced API response'
+            inputs:
+              input:
+                schema:
+                  type: object
+                  properties:
+                    order_number:
+                      type: string
+                    created_at:
+                      type: string
+                    shipped_at:
+                      type: string
+                    status:
+                      type: string
+                    delivery_method:
+                      type: string
+                    tracking_reference:
+                      type: string
+                    tracking_status:
+                      type: object
+                variable: parsedOrder.body
+            outputs:
+              output:
+                schema:
+                  type: object
+                  properties:
+                    orderNumber:
+                      type: string
+                    orderDate:
+                      type: string
+                    shippedDate:
+                      type: string
+                    orderStatus:
+                      type: string
+                    shippingMethod:
+                      type: string
+                    trackingNumber:
+                      type: string
+                    trackingStatus:
+                      type: object
+                variable: message.body
+                content: application/json
+            actions:
+              - set: output.orderNumber
+                from: input.order_number
+              - set: output.orderDate
+                from: input.created_at
+              - set: output.shippedDate
+                from: input.shipped_at
+              - set: output.orderStatus
+                from: input.status
+              - set: output.shippingMethod
+                from: input.delivery_method
+              - set: output.trackingNumber
+                from: input.tracking_reference
+              - set: output.trackingStatus
+                from: input.tracking_status
+        - redact:
+            version: 2.0.0
+            title: 'Redact Tracking Number'
+            description: 'Redacts sensitive tracking number information for privacy'
+            actions:
+              - action: redact
+                path: message.body.trackingNumber
+                value: '***REDACTED***'
+    activity-log:
+      enabled: true
+      success-content: activity
+      error-content: payload
+
+# Made with Bob
